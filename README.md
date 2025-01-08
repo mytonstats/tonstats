@@ -1,0 +1,1 @@
+Telegram bot for tracking and analyzing spending history and stats on the TON blockchain.
