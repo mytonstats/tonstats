@@ -1,95 +1,89 @@
-'use client'
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { useTonConnectUI } from '@tonconnect/ui-react';
-import { Address } from "@ton/core";
+import React, { useState, useEffect } from "react";
+import { TonConnectButton, useTonConnectUI } from "@tonconnect/ui-react";
 
-export default function Home() {
+const HomePage = () => {
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
   const [tonConnectUI] = useTonConnectUI();
-  const [tonWalletAddress, setTonWalletAddress] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const handleWalletConnection = useCallback((address: string) => {
-    setTonWalletAddress(address);
-    console.log("Wallet connected successfully!");
-    setIsLoading(false);
-  }, []);
-
-  const handleWalletDisconnection = useCallback(() => {
-    setTonWalletAddress(null);
-    console.log("Wallet disconnected successfully!");
-    setIsLoading(false);
-  }, []);
 
   useEffect(() => {
-    const checkWalletConnection = async () => {
-      if (tonConnectUI.account?.address) {
-        handleWalletConnection(tonConnectUI.account?.address);
-      } else {
-        handleWalletDisconnection();
-      }
+    const wallet = tonConnectUI.wallet;
+    if (wallet) {
+      setWalletAddress(wallet.account.address);
+    }
+  }, [tonConnectUI]);
+
+  const handlePayment = async () => {
+    if (!walletAddress) {
+      setPaymentStatus("Please connect your wallet first.");
+      return;
+    }
+
+    setPaymentStatus("Processing your payment...");
+
+    const transactionMetadata = {
+      userId: "user_12345", // Replace with dynamic user ID
+      wallet: walletAddress,
+      purpose: "CSV Request",
+      txnId: `txn_${Date.now()}`,
     };
 
-    checkWalletConnection();
-
-    const unsubscribe = tonConnectUI.onStatusChange((wallet) => {
-      if (wallet) {
-        handleWalletConnection(wallet.account.address);
-      } else {
-        handleWalletDisconnection();
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [tonConnectUI, handleWalletConnection, handleWalletDisconnection]);
-
-  const handleWalletAction = async () => {
-    if (tonConnectUI.connected) {
-      setIsLoading(true);
-      await tonConnectUI.disconnect();
-    } else {
-      await tonConnectUI.openModal();
+    try {
+      // Send transaction using the correct structure
+      await tonConnectUI.sendTransaction({
+        validUntil: Math.floor(Date.now() / 1000) + 600, // 10 minutes from now
+        messages: [
+          {
+            address: "<YOUR_WALLET_ADDRESS>", // Replace with your receiving wallet address
+            amount: "100000000", // 0.1 TON in nanograms
+            payload: JSON.stringify(transactionMetadata), // Metadata as payload
+          },
+        ],
+      });
+      setPaymentStatus("Payment successful! We are processing your request.");
+    } catch (error) {
+      console.error("Payment failed:", error);
+      setPaymentStatus("Payment failed. Please try again.");
     }
   };
 
-  const formatAddress = (address: string) => {
-    const tempAddress = Address.parse(address).toString();
-    return `${tempAddress.slice(0, 4)}...${tempAddress.slice(-4)}`;
-  };
-
-  if (isLoading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded">
-          Loading...
-        </div>
-      </main>
-    );
-  }
-
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <h1 className="text-4xl font-bold mb-8">TON Connect Demo</h1>
-      {tonWalletAddress ? (
-        <div className="flex flex-col items-center">
-          <p className="mb-4">Connected: {formatAddress(tonWalletAddress)}</p>
-          <button
-            onClick={handleWalletAction}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Disconnect Wallet
-          </button>
-        </div>
+    <div className="container">
+      <h1>Welcome to MyTonStats</h1>
+
+      {walletAddress ? (
+        <>
+          <div className="walletSection">
+            <h2>Connected Wallet</h2>
+            <p className="walletAddress">{walletAddress}</p>
+            <button
+              className="disconnectButton"
+              onClick={() => tonConnectUI.disconnect()}
+            >
+              Disconnect
+            </button>
+          </div>
+
+          <div className="paymentSection">
+            <h2>Generate Your CSV File</h2>
+            <p>
+              Pay <strong>0.1 TON</strong> to process your request.
+            </p>
+            <button className="paymentButton" onClick={handlePayment}>
+              Pay 0.1 TON
+            </button>
+            {paymentStatus && <p className="paymentStatus">{paymentStatus}</p>}
+          </div>
+        </>
       ) : (
-        <button
-          onClick={handleWalletAction}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Connect TON Wallet
-        </button>
+        <div className="buttonWrapper">
+          <TonConnectButton />
+        </div>
       )}
-    </main>
+    </div>
   );
-}
+};
+
+export default HomePage;
