@@ -53,10 +53,10 @@ const HomePage = () => {
     <div className="container">
       <h1>Welcome to MyTonStats</h1>
 
-      <div className="walletSection">
-        <h2>Connected Wallet</h2>
-        {walletAddress ? (
-          <>
+      {walletAddress ? (
+        <>
+          <div className="walletSection">
+            <h2>Connected Wallet</h2>
             <p className="walletAddress">{walletAddress}</p>
             <button
               className="disconnectButton"
@@ -64,22 +64,22 @@ const HomePage = () => {
             >
               Disconnect
             </button>
-          </>
-        ) : (
-          <TonConnectButton />
-        )}
-      </div>
+          </div>
 
-      {walletAddress && (
-        <div className="paymentSection">
-          <h2>Generate Your CSV File</h2>
-          <p>
-            Pay <strong>0.1 TON</strong> to process your request.
-          </p>
-          <button className="paymentButton" onClick={handlePayment}>
-            Pay 0.1 TON
-          </button>
-          {paymentStatus && <p className="paymentStatus">{paymentStatus}</p>}
+          <div className="paymentSection">
+            <h2>Generate Your CSV File</h2>
+            <p>
+              Pay <strong>0.1 TON</strong> to process your request.
+            </p>
+            <button className="paymentButton" onClick={handlePayment}>
+              Pay 0.1 TON
+            </button>
+            {paymentStatus && <p className="paymentStatus">{paymentStatus}</p>}
+          </div>
+        </>
+      ) : (
+        <div className="buttonWrapper">
+          <TonConnectButton />
         </div>
       )}
     </div>
