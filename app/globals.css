@@ -1,43 +1,130 @@
 /* General Container Styles */
+body {
+  font-family: Arial, sans-serif;
+  background: url("/images/background.png") no-repeat center center fixed; /* Add your background image */
+  background-size: cover; /* Ensure the image covers the entire viewport */
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex; /* Enable Flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  color: #333;
+}
+
 .container {
   max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
+  width: 90%; /* Adjust width for smaller screens */
+  padding: 30px;
+  background: rgba(
+    255,
+    255,
+    255,
+    0.9
+  ); /* Slight transparency for better contrast */
+  border-radius: 15px; /* More modern rounded corners */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Stronger shadow for better depth */
   text-align: center;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Typography */
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50; /* Darker text color for better contrast */
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: #34495e; /* Slightly darker secondary heading */
+}
+
+p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.6;
 }
 
 /* Wallet Section */
 .walletSection {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #f4f9ff; /* Soft blue background */
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .walletAddress {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #4a4a4a;
-  margin-bottom: 10px;
-  word-break: break-all;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  word-wrap: break-word;
+  margin-bottom: 15px;
+  padding: 8px 12px;
+  background-color: #eaf4ff; /* Subtle blue highlight */
+  border: 1px dashed #bdd6f3;
+  border-radius: 8px;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.walletAddress:hover {
+  background-color: #d8ebff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Disconnect Button */
+.disconnectButton {
+  background-color: #e74c3c;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.disconnectButton:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
 }
 
 /* Payment Section */
 .paymentSection {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid #ddd;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f9fbff; /* Light blue background */
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
 }
 
-.paymentSection h2 {
-  margin-bottom: 10px;
-  color: #333;
+.paymentButton {
+  background-color: #3498db;
+  color: white;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.paymentSection p {
-  font-size: 0.95rem;
-  color: #555;
-  margin-bottom: 20px;
+.paymentButton:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.paymentStatus {
+  font-size: 1rem;
+  color: #16a085;
+  margin-top: 15px;
 }
 
 /* TonConnectButton Wrapper */
@@ -45,39 +132,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px auto;
+  margin: 30px auto;
 }
 
-/* Buttons */
-button {
-  font-size: 1rem;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    margin: 20px auto;
+  }
 
-.disconnectButton {
-  background-color: #f44336;
-  color: white;
-}
+  h1 {
+    font-size: 1.5rem;
+  }
 
-.disconnectButton:hover {
-  background-color: #d32f2f;
-}
+  h2 {
+    font-size: 1.3rem;
+  }
 
-.paymentButton {
-  background-color: #4caf50;
-  color: white;
-}
+  .walletAddress {
+    font-size: 1rem;
+  }
 
-.paymentButton:hover {
-  background-color: #388e3c;
-}
-
-.paymentStatus {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #00796b;
+  .disconnectButton,
+  .paymentButton {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
 }
